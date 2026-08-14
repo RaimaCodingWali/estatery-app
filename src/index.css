@@ -1,0 +1,279 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Playfair Display", Georgia, serif;
+  --color-charcoal: #2a2f2e;
+  --color-charcoal-muted: #5f6b68;
+  --color-charcoal-faint: #8a9592;
+  --color-page-bg: #0d2418;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(42, 47, 46, 0.2) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgba(42, 47, 46, 0.2);
+  border-radius: 9999px;
+}
+
+html {
+  scroll-behavior: smooth;
+  min-height: 100%;
+  min-height: 100dvh;
+  background-color: #0d2418;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  min-height: 100dvh;
+  font-family: var(--font-sans);
+  color: var(--color-charcoal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #0d2418;
+}
+
+#root {
+  min-height: 100%;
+  min-height: 100dvh;
+  position: relative;
+  isolation: isolate;
+}
+
+/* Rich dark-green foliage wallpaper — full viewport, edge to edge */
+.leaves-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background-color: #0d2418;
+  background-image: url("./assets/leaves-wallpaper.jpg");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+.main-panel {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* Dashboard / Listings panel — true glassmorphism */
+.dashboard-panel {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+}
+
+.dashboard-input {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.dashboard-input::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.dashboard-input:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+}
+
+.listing-card {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+}
+
+.listing-card-image-wrap {
+  background-color: #ffffff;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  display: block;
+  padding: 0;
+}
+
+.listing-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  background-color: #ffffff;
+  transform: scale(1);
+  transform-origin: center;
+  transition: transform 0.4s ease;
+}
+
+.listing-card:hover .listing-card-image {
+  transform: scale(1.05);
+  transform-origin: center;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+}
+
+.hero-card {
+  background-color: #ffffff;
+  background-image: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
+  border-radius: 28px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.hero-card-content {
+  background-color: #ffffff;
+}
+
+.hero-house-panel {
+  overflow: hidden;
+  border-radius: 0 28px 28px 0;
+  background-color: #ffffff;
+  background-image: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0.4rem 0.3rem 0.2rem;
+}
+
+.hero-house-image {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: bottom center;
+  display: block;
+  transform: scale(1.58);
+  transform-origin: bottom center;
+}
+
+@media (max-width: 767px) {
+  .hero-house-panel {
+    border-radius: 0 0 28px 28px;
+    min-height: 280px;
+    padding: 0.35rem 0.4rem 0.3rem;
+  }
+
+  .hero-house-image {
+    transform: scale(1.38);
+  }
+}
+
+.modal-panel {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+}
+
+.panel-scroll {
+  mask-image: linear-gradient(to bottom, black 0%, black 88%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 88%, transparent 100%);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out forwards;
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-modal-in {
+  animation: modal-in 0.3s ease-out forwards;
+}
+
+@keyframes bounce-subtle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+.animate-bounce-subtle {
+  animation: bounce-subtle 2s ease-in-out infinite;
+}
+
+@keyframes call-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+@keyframes call-modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.call-pulse-ring {
+  animation: call-pulse 2.1s ease-out infinite;
+}
+
+.call-modal-enter {
+  animation: call-modal-in 0.35s ease-out;
+}
