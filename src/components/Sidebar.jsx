@@ -47,25 +47,44 @@ const navItems = [
   },
 ];
 
-export default function Sidebar({ activeNav, onNavChange, isPremium = false, onUpgradeClick }) {
+function SidebarContent({ activeNav, onNavChange, isPremium, onUpgradeClick, onClose }) {
+  const handleNavClick = (id) => {
+    onNavChange(id);
+    onClose?.();
+  };
+
   return (
-    <aside className="hidden md:flex flex-col w-[240px] shrink-0 border-r border-white/20 p-5 bg-white/10 backdrop-blur-xl">
-      <div className="flex items-center gap-2.5 mb-8 px-1">
-        <div className="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center">
-          <svg className="w-5 h-5 text-emerald-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205l3 1m1.5.5l-1.5-.5M6.75 7.364V3h-3v18m3-13.636l10.5-3.819" />
-          </svg>
+    <>
+      <div className="flex items-center justify-between gap-2 mb-8 px-1">
+        <div className="flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center">
+            <svg className="w-5 h-5 text-emerald-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205l3 1m1.5.5l-1.5-.5M6.75 7.364V3h-3v18m3-13.636l10.5-3.819" />
+            </svg>
+          </div>
+          <span className="text-white font-semibold text-sm tracking-wide">Estatery</span>
         </div>
-        <span className="text-white font-semibold text-sm tracking-wide">Estatery</span>
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close menu"
+            className="p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-colors"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        )}
       </div>
 
-      <nav className="flex-1 space-y-0.5">
+      <nav className="flex-1 space-y-0.5 overflow-y-auto">
         {navItems.map((item) => {
           const isActive = activeNav === item.id;
           return (
             <button
               key={item.id}
-              onClick={() => onNavChange(item.id)}
+              onClick={() => handleNavClick(item.id)}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200 ${
                 isActive
                   ? "bg-white/20 backdrop-blur-md text-white border border-white/30 shadow-lg"
@@ -79,7 +98,7 @@ export default function Sidebar({ activeNav, onNavChange, isPremium = false, onU
         })}
       </nav>
 
-      <div className="mt-auto pt-4">
+      <div className="mt-auto pt-4 shrink-0">
         <div
           className={`rounded-xl p-3.5 backdrop-blur-xl border ${
             isPremium
@@ -106,7 +125,10 @@ export default function Sidebar({ activeNav, onNavChange, isPremium = false, onU
               <p className="text-white text-sm font-medium">Unlock all listings</p>
               <button
                 type="button"
-                onClick={onUpgradeClick}
+                onClick={() => {
+                  onUpgradeClick?.();
+                  onClose?.();
+                }}
                 className="mt-2.5 w-full py-1.5 rounded-lg bg-emerald-500/20 text-emerald-200 text-xs font-medium border border-emerald-400/30 hover:bg-emerald-500/30 transition-colors"
               >
                 Upgrade
@@ -115,6 +137,52 @@ export default function Sidebar({ activeNav, onNavChange, isPremium = false, onU
           )}
         </div>
       </div>
-    </aside>
+    </>
+  );
+}
+
+export default function Sidebar({
+  activeNav,
+  onNavChange,
+  isPremium = false,
+  onUpgradeClick,
+  isMobileOpen = false,
+  onMobileClose,
+}) {
+  return (
+    <>
+      {isMobileOpen && (
+        <div
+          className="md:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+          onClick={onMobileClose}
+          aria-hidden="true"
+        />
+      )}
+
+      <aside
+        className={`md:hidden fixed inset-y-0 left-0 z-50 flex flex-col w-[280px] max-w-[85vw] border-r border-white/20 p-5 bg-[#0d2418]/95 backdrop-blur-xl shadow-2xl transition-transform duration-300 ease-in-out ${
+          isMobileOpen ? "translate-x-0" : "-translate-x-full pointer-events-none"
+        }`}
+        aria-hidden={!isMobileOpen}
+        aria-label="Navigation menu"
+      >
+        <SidebarContent
+          activeNav={activeNav}
+          onNavChange={onNavChange}
+          isPremium={isPremium}
+          onUpgradeClick={onUpgradeClick}
+          onClose={onMobileClose}
+        />
+      </aside>
+
+      <aside className="hidden md:flex flex-col w-[240px] shrink-0 border-r border-white/20 p-5 bg-white/10 backdrop-blur-xl">
+        <SidebarContent
+          activeNav={activeNav}
+          onNavChange={onNavChange}
+          isPremium={isPremium}
+          onUpgradeClick={onUpgradeClick}
+        />
+      </aside>
+    </>
   );
 }

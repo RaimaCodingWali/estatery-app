@@ -183,6 +183,7 @@ export default function Header({
   onSignUp,
   onLogout,
   onOpenSettings,
+  onMenuOpen,
   user,
   isAgentsView = false,
   isSettingsView = false,
@@ -195,11 +196,23 @@ export default function Header({
     <header className="dashboard-header shrink-0 px-5 md:px-7 py-4 border-b border-white/20 bg-white/10 backdrop-blur-xl">
       <div className="flex flex-col xl:flex-row xl:items-center gap-4">
         <div className="flex items-center justify-between gap-4 shrink-0">
-          <div>
-            <p className="text-white/60 text-xs font-medium uppercase tracking-wider">Estatery Dashboard</p>
-            <h1 className="font-[family-name:var(--font-display)] text-xl md:text-2xl font-bold text-white tracking-tight">
-              Explore Properties
-            </h1>
+          <div className="flex items-center gap-3 min-w-0">
+            <button
+              type="button"
+              onClick={onMenuOpen}
+              className="md:hidden shrink-0 p-2 rounded-xl bg-white/10 backdrop-blur-xl border border-white/20 text-white/80 hover:text-white hover:bg-white/15 transition-colors"
+              aria-label="Open navigation menu"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+              </svg>
+            </button>
+            <div className="min-w-0">
+              <p className="text-white/60 text-xs font-medium uppercase tracking-wider">Estatery Dashboard</p>
+              <h1 className="font-[family-name:var(--font-display)] text-xl md:text-2xl font-bold text-white tracking-tight">
+                Explore Properties
+              </h1>
+            </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             {!isLoggedIn && (

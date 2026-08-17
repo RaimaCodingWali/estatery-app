@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import HeroSection from "./components/HeroSection";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
@@ -26,6 +26,7 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [priceRange, setPriceRange] = useState("0");
   const [activeNav, setActiveNav] = useState("dashboard");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [modal, setModal] = useState({ isOpen: false, mode: "inquiry", property: null });
   const [listingModalOpen, setListingModalOpen] = useState(false);
   const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
@@ -96,6 +97,14 @@ export default function App() {
   const scrollToDashboard = () => {
     dashboardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
+
+  useEffect(() => {
+    if (!sidebarOpen) return;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [sidebarOpen]);
 
   const toggleFavorite = (id) => {
     setFavorites((prev) => {
@@ -241,17 +250,19 @@ export default function App() {
       <section
         id="dashboard"
         ref={dashboardRef}
-        className="dashboard-section min-h-screen min-h-dvh flex items-start justify-center px-4 md:px-6 lg:px-8 py-8 md:py-12"
+        className="dashboard-section min-h-screen min-h-dvh flex items-stretch justify-center px-4 md:px-6 lg:px-8 py-4 md:py-8"
       >
-        <div className="dashboard-panel w-full max-w-[1400px] min-h-[min(920px,calc(100vh-4rem))] flex rounded-[28px] overflow-hidden bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
+        <div className="dashboard-panel w-full max-w-[1400px] h-[calc(100dvh-2rem)] md:h-[min(920px,calc(100dvh-4rem))] max-h-[calc(100dvh-2rem)] md:max-h-[min(920px,calc(100dvh-4rem))] flex rounded-[28px] overflow-hidden bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
           <Sidebar
             activeNav={activeNav}
             onNavChange={setActiveNav}
             isPremium={isPremium}
             onUpgradeClick={handleUpgradeClick}
+            isMobileOpen={sidebarOpen}
+            onMobileClose={() => setSidebarOpen(false)}
           />
 
-          <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-transparent">
+          <div className="flex-1 flex flex-col min-w-0 min-h-0 overflow-hidden bg-transparent">
             <Header
               searchQuery={searchQuery}
               onSearchChange={setSearchQuery}
@@ -261,13 +272,14 @@ export default function App() {
               onSignUp={() => setSignUpOpen(true)}
               onLogout={handleLogout}
               onOpenSettings={() => setActiveNav("settings")}
+              onMenuOpen={() => setSidebarOpen(true)}
               user={user}
               isAgentsView={isAgentsView}
               isSettingsView={isSettingsView}
               isListingsView={isListingsView}
             />
 
-            <main className="flex-1 min-h-0 overflow-y-auto scroll-smooth px-5 md:px-7 py-5 pb-8 bg-transparent">
+            <main className="flex-1 min-h-0 overflow-y-auto overscroll-contain scroll-smooth px-5 md:px-7 py-5 pb-8 bg-transparent">
               <div className="flex items-end justify-between mb-6">
                 <div>
                   <h2 className="font-[family-name:var(--font-display)] text-[1.65rem] font-bold text-white leading-tight">
