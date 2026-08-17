@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { createPortal } from "react-dom";
+
 const navItems = [
   {
     id: "dashboard",
@@ -149,22 +152,34 @@ export default function Sidebar({
   isMobileOpen = false,
   onMobileClose,
 }) {
-  return (
+  useEffect(() => {
+    if (!isMobileOpen) return;
+
+    const handleEsc = (e) => {
+      if (e.key === "Escape") onMobileClose?.();
+    };
+
+    document.addEventListener("keydown", handleEsc);
+    return () => document.removeEventListener("keydown", handleEsc);
+  }, [isMobileOpen, onMobileClose]);
+
+  const mobileDrawer = (
     <>
-      {isMobileOpen && (
-        <div
-          className="md:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
-          onClick={onMobileClose}
-          aria-hidden="true"
-        />
-      )}
+      <div
+        className={`md:hidden fixed inset-0 z-[200] bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${
+          isMobileOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={onMobileClose}
+        aria-hidden="true"
+      />
 
       <aside
-        className={`md:hidden fixed inset-y-0 left-0 z-50 flex flex-col w-[280px] max-w-[85vw] border-r border-white/20 p-5 bg-[#0d2418]/95 backdrop-blur-xl shadow-2xl transition-transform duration-300 ease-in-out ${
+        role="dialog"
+        aria-modal="true"
+        aria-label="Navigation menu"
+        className={`md:hidden fixed inset-y-0 left-0 z-[210] flex flex-col w-full max-w-[320px] border-r border-white/20 p-5 bg-[#0d2418]/98 backdrop-blur-xl shadow-2xl transition-transform duration-300 ease-in-out ${
           isMobileOpen ? "translate-x-0" : "-translate-x-full pointer-events-none"
         }`}
-        aria-hidden={!isMobileOpen}
-        aria-label="Navigation menu"
       >
         <SidebarContent
           activeNav={activeNav}
@@ -174,6 +189,12 @@ export default function Sidebar({
           onClose={onMobileClose}
         />
       </aside>
+    </>
+  );
+
+  return (
+    <>
+      {createPortal(mobileDrawer, document.body)}
 
       <aside className="hidden md:flex flex-col w-[240px] shrink-0 border-r border-white/20 p-5 bg-white/10 backdrop-blur-xl">
         <SidebarContent
