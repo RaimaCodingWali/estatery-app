@@ -184,6 +184,7 @@ export default function Header({
   onLogout,
   onOpenSettings,
   onMenuOpen,
+  isMenuOpen = false,
   user,
   isAgentsView = false,
   isSettingsView = false,
@@ -195,26 +196,27 @@ export default function Header({
   return (
     <header className="dashboard-header shrink-0 px-5 md:px-7 py-4 border-b border-white/20 bg-white/10 backdrop-blur-xl">
       <div className="flex flex-col xl:flex-row xl:items-center gap-4">
-        <div className="flex items-center justify-between gap-4 shrink-0">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shrink-0 w-full">
           <div className="flex items-center gap-3 min-w-0">
             <button
               type="button"
-              onClick={onMenuOpen}
-              className="md:hidden shrink-0 p-2 rounded-xl bg-white/10 backdrop-blur-xl border border-white/20 text-white/80 hover:text-white hover:bg-white/15 transition-colors"
+              onClick={() => onMenuOpen?.()}
+              className="md:hidden relative z-20 shrink-0 p-2.5 rounded-xl bg-white/10 backdrop-blur-xl border border-white/20 text-white/80 hover:text-white hover:bg-white/15 active:bg-white/20 transition-colors touch-manipulation"
               aria-label="Open navigation menu"
+              aria-expanded={isMenuOpen}
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
               </svg>
             </button>
-            <div className="min-w-0">
+            <div className="min-w-0 flex-1">
               <p className="text-white/60 text-xs font-medium uppercase tracking-wider">Estatery Dashboard</p>
-              <h1 className="font-[family-name:var(--font-display)] text-xl md:text-2xl font-bold text-white tracking-tight">
+              <h1 className="font-[family-name:var(--font-display)] text-xl md:text-2xl font-bold text-white tracking-tight truncate">
                 Explore Properties
               </h1>
             </div>
           </div>
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto xl:hidden">
             {!isLoggedIn && (
               <button
                 type="button"

@@ -163,12 +163,10 @@ export default function Sidebar({
     return () => document.removeEventListener("keydown", handleEsc);
   }, [isMobileOpen, onMobileClose]);
 
-  const mobileDrawer = (
+  const mobileDrawer = isMobileOpen ? (
     <>
       <div
-        className={`md:hidden fixed inset-0 z-[200] bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${
-          isMobileOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
+        className="md:hidden fixed inset-0 z-[200] bg-black/50 backdrop-blur-sm"
         onClick={onMobileClose}
         aria-hidden="true"
       />
@@ -177,9 +175,7 @@ export default function Sidebar({
         role="dialog"
         aria-modal="true"
         aria-label="Navigation menu"
-        className={`md:hidden fixed inset-y-0 left-0 z-[210] flex flex-col w-full max-w-[320px] border-r border-white/20 p-5 bg-[#0d2418]/98 backdrop-blur-xl shadow-2xl transition-transform duration-300 ease-in-out ${
-          isMobileOpen ? "translate-x-0" : "-translate-x-full pointer-events-none"
-        }`}
+        className="md:hidden fixed inset-y-0 left-0 z-[210] flex flex-col h-dvh w-full max-w-[320px] border-r border-white/20 p-5 pt-[max(1.25rem,env(safe-area-inset-top))] pb-[max(1.25rem,env(safe-area-inset-bottom))] bg-[#0d2418]/98 backdrop-blur-xl shadow-2xl animate-slide-in-left"
       >
         <SidebarContent
           activeNav={activeNav}
@@ -190,11 +186,11 @@ export default function Sidebar({
         />
       </aside>
     </>
-  );
+  ) : null;
 
   return (
     <>
-      {createPortal(mobileDrawer, document.body)}
+      {mobileDrawer && createPortal(mobileDrawer, document.body)}
 
       <aside className="hidden md:flex flex-col w-[240px] shrink-0 border-r border-white/20 p-5 bg-white/10 backdrop-blur-xl">
         <SidebarContent

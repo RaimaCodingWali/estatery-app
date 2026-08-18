@@ -106,6 +106,9 @@ export default function App() {
     };
   }, [sidebarOpen]);
 
+  const handleOpenSidebar = () => setSidebarOpen(true);
+  const handleCloseSidebar = () => setSidebarOpen(false);
+
   const toggleFavorite = (id) => {
     setFavorites((prev) => {
       const next = new Set(prev);
@@ -259,7 +262,7 @@ export default function App() {
             isPremium={isPremium}
             onUpgradeClick={handleUpgradeClick}
             isMobileOpen={sidebarOpen}
-            onMobileClose={() => setSidebarOpen(false)}
+            onMobileClose={handleCloseSidebar}
           />
 
           <div className="flex-1 flex flex-col min-w-0 min-h-0 overflow-hidden bg-transparent">
@@ -272,7 +275,8 @@ export default function App() {
               onSignUp={() => setSignUpOpen(true)}
               onLogout={handleLogout}
               onOpenSettings={() => setActiveNav("settings")}
-              onMenuOpen={() => setSidebarOpen(true)}
+              onMenuOpen={handleOpenSidebar}
+              isMenuOpen={sidebarOpen}
               user={user}
               isAgentsView={isAgentsView}
               isSettingsView={isSettingsView}
